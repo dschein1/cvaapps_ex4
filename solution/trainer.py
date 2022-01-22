@@ -80,7 +80,7 @@ class Trainer:
                       f'Acc: {accuracy:.2f}[%] '
                       f'({correct_labeled_samples}/{nof_samples})')
 
-        return avg_loss, accuracy
+        return avg_loss, accuracy.item()
 
     def evaluate_model_on_dataloader(
             self, dataset: torch.utils.data.Dataset) -> tuple[float, float]:
@@ -121,7 +121,7 @@ class Trainer:
                       f'Acc: {accuracy:.2f}[%] '
                       f'({correct_labeled_samples}/{nof_samples})')
 
-        return avg_loss, accuracy
+        return avg_loss, accuracy.item()
 
     def validate(self):
         """Evaluate the model performance."""
@@ -187,8 +187,11 @@ class Trainer:
             print(f'Epoch {self.epoch}/{epochs}')
 
             train_loss, train_acc = self.train_one_epoch()
+            # train_acc = train_acc.item()
             val_loss, val_acc = self.validate()
+            # val_acc = val_acc.item()
             test_loss, test_acc = self.test()
+            # test_acc = test_acc.item()
 
             output_data["train_loss"].append(train_loss)
             output_data["train_acc"].append(train_acc)

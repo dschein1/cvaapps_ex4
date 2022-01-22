@@ -12,7 +12,6 @@ from torch.utils.data import DataLoader
 from common import FIGURES_DIR
 from utils import load_dataset, load_model
 
-
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 
@@ -58,7 +57,29 @@ def get_soft_scores_and_true_labels(dataset, model):
         gt_labels: an iterable holding the samples' ground truth labels.
     """
     """INSERT YOUR CODE HERE, overrun return."""
-    return torch.rand(100, ), torch.rand(100, ), torch.randint(0, 2, (100, ))
+    BATCH_SIZE = 32
+    all_first_soft_scores, all_second_soft_scores, gt_labels = torch.tensor([]), torch.tensor([]), torch.tensor([])
+    amount_of_one_label = 0  # 1 - label == a fake picture
+    total_samples = len(dataset)
+    model.eval()
+    dataloader = DataLoader(dataset,
+                            batch_size=BATCH_SIZE,
+                            shuffle=False)
+    with torch.no_grad():
+        for batch_idx, (inputs, targets) in enumerate(dataloader):
+            """INSERT YOUR CODE HERE."""
+            inputs, targets = inputs.to(device), targets.to(device)
+            output = model(inputs)
+            predictions = torch.argmax(output, dim=1)
+            gt_labels = torch.cat((gt_labels, targets.to('cpu')), dim=0)
+            all_first_soft_scores = torch.cat((all_first_soft_scores, output[:, 0].to('cpu')), dim=0)
+            all_second_soft_scores = torch.cat((all_second_soft_scores, output[:, 1].to('cpu')), dim=0)
+            amount_of_one_label += torch.sum(targets).item()
+
+    print(
+        f'fake : real = {amount_of_one_label / (total_samples - amount_of_one_label)} fake = {amount_of_one_label},'
+        f' real = {total_samples - amount_of_one_label}')
+    return all_first_soft_scores, all_second_soft_scores, gt_labels
 
 
 def plot_roc_curve(roc_curve_figure,

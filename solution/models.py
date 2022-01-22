@@ -1,7 +1,7 @@
 """Hold all models you wish to train."""
 import torch
 import torch.nn.functional as F
-
+import utils  # NEED TO DELETE AFTER
 from torch import nn
 
 from xcpetion import build_xception_backbone
@@ -9,6 +9,7 @@ from xcpetion import build_xception_backbone
 
 class SimpleNet(nn.Module):
     """Simple Convolutional and Fully Connect network."""
+
     def __init__(self):
         super().__init__()
         self.conv1 = nn.Conv2d(3, 6, kernel_size=(7, 7))
@@ -42,4 +43,22 @@ def get_xception_based_model() -> nn.Module:
     classification head stated in the exercise.
     """
     """INSERT YOUR CODE HERE, overrun return."""
-    return SimpleNet()
+    custom_network = build_xception_backbone(False, num_classes=1000)
+    custom_network.fc = nn.Sequential(nn.Linear(2048, 1000),
+                                      nn.ReLU(),
+                                      nn.Linear(1000, 256),
+                                      nn.ReLU(),
+                                      nn.Linear(256, 64),
+                                      nn.ReLU(),
+                                      nn.Linear(64, 2))
+    return custom_network
+
+
+if __name__ == '__main__':
+    x_clean = build_xception_backbone(False)
+    vanilla = utils.get_nof_params(x_clean)
+    print(vanilla)
+    cust = get_xception_based_model()
+    cust_am = utils.get_nof_params(cust)
+    print(cust_am)
+    print(f'added params: {cust_am - vanilla}')

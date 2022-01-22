@@ -30,11 +30,11 @@ class FacesDataset(Dataset):
         """INSERT YOUR CODE HERE, overrun return."""
         if index < len(self.real_image_names):
             im = Image.open(os.path.join(self.real_base, self.real_image_names[index]))
-            label = 0
+            label = 0  # a Real image
         else:
             im = Image.open(os.path.join(self.fake_base, self.fake_image_names[index - len(self.real_image_names)]))
 
-            label = 1
+            label = 1  # a Fake image
         if self.transform:
             im = self.transform(im)
         return im, label

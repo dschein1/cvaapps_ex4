@@ -1,6 +1,7 @@
 """Main training script."""
 import argparse
 
+import torch.cuda
 from torch import nn
 from torch import optim
 
@@ -99,4 +100,5 @@ def main():
 
 
 if __name__ == '__main__':
+    print(f'using: {"CUDA" if torch.cuda.is_available() else "CPU"}')
     main()
