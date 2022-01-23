@@ -67,10 +67,8 @@ def get_soft_scores_and_true_labels(dataset, model):
                             shuffle=False)
     with torch.no_grad():
         for batch_idx, (inputs, targets) in enumerate(dataloader):
-            """INSERT YOUR CODE HERE."""
             inputs, targets = inputs.to(device), targets.to(device)
             output = model(inputs)
-            predictions = torch.argmax(output, dim=1)
             gt_labels = torch.cat((gt_labels, targets.to('cpu')), dim=0)
             all_first_soft_scores = torch.cat((all_first_soft_scores, output[:, 0].to('cpu')), dim=0)
             all_second_soft_scores = torch.cat((all_second_soft_scores, output[:, 1].to('cpu')), dim=0)

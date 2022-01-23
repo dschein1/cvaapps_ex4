@@ -43,7 +43,7 @@ def get_xception_based_model() -> nn.Module:
     classification head stated in the exercise.
     """
     """INSERT YOUR CODE HERE, overrun return."""
-    custom_network = build_xception_backbone(False, num_classes=1000)
+    custom_network = build_xception_backbone(True, num_classes=1000)
     custom_network.fc = nn.Sequential(nn.Linear(2048, 1000),
                                       nn.ReLU(),
                                       nn.Linear(1000, 256),
@@ -54,7 +54,9 @@ def get_xception_based_model() -> nn.Module:
     return custom_network
 
 
+# DELETE BEFORE SUBMITTING
 if __name__ == '__main__':
+    '''
     x_clean = build_xception_backbone(False)
     vanilla = utils.get_nof_params(x_clean)
     print(vanilla)
@@ -62,3 +64,5 @@ if __name__ == '__main__':
     cust_am = utils.get_nof_params(cust)
     print(cust_am)
     print(f'added params: {cust_am - vanilla}')
+    '''
+    utils.count_real_fakes_gt('synthetic_dataset', 'test')

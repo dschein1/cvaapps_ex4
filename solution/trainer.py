@@ -9,7 +9,6 @@ from torch.utils.data import Dataset, DataLoader
 
 from common import OUTPUT_DIR, CHECKPOINT_DIR
 
-
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 
@@ -21,9 +20,11 @@ class LoggingParameters:
     optimizer_name: str
     optimizer_params: dict
 
+
 # pylint: disable=R0902, R0913, R0914
 class Trainer:
     """Abstract model trainer on a binary classification task."""
+
     def __init__(self,
                  model: nn.Module,
                  optimizer: torch.optim,
@@ -66,7 +67,7 @@ class Trainer:
             output = self.model(inputs)
             loss = self.criterion(output, targets)
             loss.backward()
-            predictions = torch.argmax(output,dim=1)
+            predictions = torch.argmax(output, dim=1)
             total_loss += loss.item()
             nof_samples += targets.size(0)
 

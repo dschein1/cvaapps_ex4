@@ -12,7 +12,6 @@ from torch.utils.data import DataLoader
 from common import FIGURES_DIR
 from utils import load_dataset, load_model
 
-
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 
@@ -62,7 +61,36 @@ def compute_gradient_saliency_maps(samples: torch.tensor,
         shape Bx256x256 where B is the number of images in samples.
     """
     """INSERT YOUR CODE HERE, overrun return."""
-    return torch.rand(6, 256, 256)
+    grad_map = torch.zeros(samples.shape[0], samples.shape[2], samples.shape[3])
+    model.eval()
+    with torch.enable_grad():
+        samples.requires_grad_()
+        output = model(samples)
+        # print(output.shape, true_labels.shape)
+        # print(output, true_labels)
+        # print(output[:, true_labels])
+        # print(output.gather(1, true_labels.view(-1, 1)))
+        for idx, out in enumerate(output):
+            out[true_labels[idx]].backward(retain_graph=True)
+        # for idx in range(samples.shape[0]):
+        #     grad_map[idx, :, :] = torch.max(
+        #         torch.abs(
+        #             samples.grads[idx]
+        #         ),
+        #         dim=1)\
+        grad_map = torch.max(
+            torch.abs(
+                samples.grad
+            ),
+            dim=1).values
+
+        # output_for_true = output.gather(1, true_labels.view(-1, 1))
+        # output_for_true.backward()
+        # grads = samples.grad  # SUPPOSED TO BE: B X 3 X 256 X 256
+        # abs_grad = torch.abs(grads)  # NOT SURE IF THIS IS WHAT THEY MEANT BY ABSOLUTE VALUES (L1)
+        # max_values = torch.max(abs_grad, dim=1)  # 1 dim is the color dimension.
+
+    return grad_map
 
 
 def main():  # pylint: disable=R0914, R0915
@@ -92,8 +120,8 @@ def main():  # pylint: disable=R0914, R0915
         all_samples.append(torch.cat([sample_to_image(s).unsqueeze(0)
                                       for s in samples]))
         saliency_maps = compute_gradient_saliency_maps(samples.to(device),
-                                     true_labels.to(device),
-                                     model)
+                                                       true_labels.to(device),
+                                                       model)
         all_saliency_maps.append(saliency_maps.cpu().detach())
 
     all_samples = torch.cat(all_samples)
@@ -123,6 +151,7 @@ def main():  # pylint: disable=R0914, R0915
         os.path.join(FIGURES_DIR,
                      f'{args.dataset}_{args.model}_'
                      f'saliency_maps_and_images_pairs.png'))
+    # return 0  # FOR DEBUGGING REASONS.
 
     # loop through the images in the test set and compute saliency map for
     # each image. Compute the average map of all real face image and
@@ -148,13 +177,13 @@ def main():  # pylint: disable=R0914, R0915
     all_real_saliency_maps = torch.cat(real_images_saliency_maps)
     all_fake_saliency_maps = torch.cat(fake_images_saliency_maps)
 
-    for idx in range(all_real_saliency_maps.shape[0]):
-        all_real_saliency_maps[idx] -= all_real_saliency_maps[idx].min()
-        all_real_saliency_maps[idx] /= all_real_saliency_maps[idx].max()
-
-    for idx in range(all_fake_saliency_maps.shape[0]):
-        all_fake_saliency_maps[idx] -= all_fake_saliency_maps[idx].min()
-        all_fake_saliency_maps[idx] /= all_fake_saliency_maps[idx].max()
+    # for idx in range(all_real_saliency_maps.shape[0]):
+    #     all_real_saliency_maps[idx] -= all_real_saliency_maps[idx].min()
+    #     all_real_saliency_maps[idx] /= all_real_saliency_maps[idx].max()
+    #
+    # for idx in range(all_fake_saliency_maps.shape[0]):
+    #     all_fake_saliency_maps[idx] -= all_fake_saliency_maps[idx].min()
+    #     all_fake_saliency_maps[idx] /= all_fake_saliency_maps[idx].max()
 
     mean_saliency_maps = plt.figure()
     plt.subplot(1, 2, 1)

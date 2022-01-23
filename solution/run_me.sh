@@ -6,7 +6,7 @@ python3 train_main.py -d fakes_dataset -m SimpleNet --lr 0.001 -b 32 -e 5 -o Ada
 
 # Train two networks on the Synthetic faces dataset:
 python3 train_main.py -d synthetic_dataset -m SimpleNet --lr 0.001 -b 32 -e 5 -o Adam
-python3 train_main.py -d synthetic_dataset -m XceptionBased --lr 0.001 -b 32 -e 2 -o Adam
+python3 train_main.py -d synthetic_dataset -m XceptionBased --lr 0.001 -b 16 -e 2 -o Adam
 
 # Plot accuracy and loss graphs:
 python3 plot_accuracy_and_loss.py -m SimpleNet -j out/fakes_dataset_SimpleNet_Adam.json -d fakes_dataset
