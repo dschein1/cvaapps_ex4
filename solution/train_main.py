@@ -27,7 +27,7 @@ def parse_args():
     parser.add_argument('--epochs', '-e', default=2, type=int,
                         help='Number of epochs to run')
     parser.add_argument('--model', '-m', default='SimpleNet', type=str,
-                        help='Model name: SimpleNet or XceptionBased')
+                        help='Model name: SimpleNet or XceptionBased or EfficientBased')
     parser.add_argument('--optimizer', '-o', default='SGD', type=str,
                         help='Optimization Algorithm')
     parser.add_argument('--dataset', '-d',
