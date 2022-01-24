@@ -53,6 +53,21 @@ def get_xception_based_model() -> nn.Module:
                                       nn.Linear(64, 2))
     return custom_network
 
+
+def get_effecient_model(pretrained=True):
+    efficientnet = torch.hub.load('NVIDIA/DeepLearningExamples:torchhub', 'nvidia_efficientnet_b0',
+                                  pretrained=pretrained)
+    efficientnet.classifier = nn.Sequential(nn.AdaptiveAvgPool2d(1),
+                                            nn.Flatten(),
+                                            nn.Dropout(0.2),
+                                            nn.Linear(1280, 256),
+                                            nn.ReLU(),
+                                            nn.Linear(256, 64),
+                                            nn.ReLU(),
+                                            nn.Linear(64, 2))
+    return efficientnet
+
+
 '''
 # DELETE BEFORE SUBMITTING
 if __name__ == '__main__':
