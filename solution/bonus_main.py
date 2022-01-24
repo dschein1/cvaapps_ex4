@@ -24,7 +24,6 @@ def main() -> tuple[float, int]:
     _, test_accuracy = trainer.test()
 
     nof_parameters = get_nof_params(model)
-
     return test_accuracy, nof_parameters
 
 
