@@ -156,7 +156,7 @@ def main():  # pylint: disable=R0914, R0915
     # loop through the images in the test set and compute saliency map for
     # each image. Compute the average map of all real face image and
     # all fake face image images.
-    dataloader = DataLoader(test_dataset, batch_size=32, shuffle=True)
+    dataloader = DataLoader(test_dataset, batch_size=16, shuffle=True)
     real_images_saliency_maps = []
     fake_images_saliency_maps = []
 

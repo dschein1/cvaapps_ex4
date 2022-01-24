@@ -57,7 +57,7 @@ def get_soft_scores_and_true_labels(dataset, model):
         gt_labels: an iterable holding the samples' ground truth labels.
     """
     """INSERT YOUR CODE HERE, overrun return."""
-    BATCH_SIZE = 32
+    BATCH_SIZE = 16
     all_first_soft_scores, all_second_soft_scores, gt_labels = torch.tensor([]), torch.tensor([]), torch.tensor([])
     amount_of_one_label = 0  # 1 - label == a fake picture
     total_samples = len(dataset)
