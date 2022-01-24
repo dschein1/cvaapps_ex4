@@ -83,20 +83,3 @@ def get_nof_params(model: nn.Module) -> int:
         The number of model parameters.
     """
     return sum(p.numel() for p in model.parameters() if p.requires_grad)
-
-
-# DELETE THIS FUNCTION BEFORE SUBMISSION:
-def count_real_fakes_gt(data_name: str, set_type: str):
-    dataset = load_dataset(data_name, set_type)  # Assuming correct naming
-    total_samples = len(dataset)
-    amount_of_one_label = 0
-    BATCH_SIZE = 1
-    dataloader = torch.utils.data.DataLoader(dataset,
-                                             batch_size=BATCH_SIZE,
-                                             shuffle=False)
-    for batch_idx, (_, targets) in enumerate(dataloader):
-        amount_of_one_label += torch.sum(targets).item()
-
-    print(
-        f'fake : real = {amount_of_one_label / (total_samples - amount_of_one_label)} fake = {amount_of_one_label},'
-        f' real = {total_samples - amount_of_one_label}')

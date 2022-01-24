@@ -1,7 +1,6 @@
 """Hold all models you wish to train."""
 import torch
 import torch.nn.functional as F
-# import utils  # NEED TO DELETE AFTER
 from torch import nn
 
 from xcpetion import build_xception_backbone
@@ -67,18 +66,3 @@ def get_effecient_model(pretrained=True):
                                             nn.Linear(64, 2))
     return efficientnet
 
-
-'''
-# DELETE BEFORE SUBMITTING
-if __name__ == '__main__':
-    
-    # x_clean = build_xception_backbone(False)
-    # vanilla = utils.get_nof_params(x_clean)
-    # print(vanilla)
-    # cust = get_xception_based_model()
-    # cust_am = utils.get_nof_params(cust)
-    # print(cust_am)
-    # print(f'added params: {cust_am - vanilla}')
-    # 
-    utils.count_real_fakes_gt('synthetic_dataset', 'test')
-'''
